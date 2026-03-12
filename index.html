@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Cross-Embodiment Transfer via Behavior-Aligned Representations</title>
+
+    <meta name="description" content="Cross-Embodiment Transfer via Behavior-Aligned Representations">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+    <!-- <base href="/"> -->
+
+        <!--FACEBOOK-->
+    <meta property="og:image" content="https://barx.github.io/img/BARX/barx_figures_v4.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="682">
+    <meta property="og:image:height" content="682">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://barx.github.io/"/>
+    <meta property="og:title" content="Cross-Embodiment Transfer via Behavior-Aligned Representations" />
+    <meta property="og:description" content="Project page for Cross-Embodiment Transfer via Behavior-Aligned Representations." />
+
+        <!--TWITTER-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cross-Embodiment Transfer via Behavior-Aligned Representations" />
+    <meta name="twitter:description" content="Project page for Cross-Embodiment Transfer via Behavior-Aligned Representations." />
+    <!-- <meta name="twitter:image" content="https://rt-h.github.io/img/random_img_frames.png" /> -->
+
+
+<!--     <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+  <!-- <link rel="icon" type="image/png" href="img/seal_icon.png"> -->
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    
+    <!-- Slick Carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+
+    <script src="js/app.js"></script>
+
+    <style>
+        .nav-pills {
+          position: relative;
+          display: inline;
+        }
+        .imtip {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        h1 {
+            font-weight: bold;
+            font-size: 2.5em;
+        }
+        h2 {
+            font-weight: bold;
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 1.5rem;
+        }
+        h3 {
+            font-size: 1.8em;
+            margin-bottom: 1.2rem;
+        }
+        h4 {
+            font-size: 1.5em;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .video-caption {
+            margin-top: 8px;
+            text-align: center;
+            font-size: 1.1em;
+            color: #333;
+            min-height: 40px;
+        }
+        .task-title {
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 1.6em;
+        }
+        
+        /* Carousel Styles */
+        .slick-prev:before, .slick-next:before {
+            color: #ff4500; /* Brighter color (orange-red) */
+            font-size: 36px; /* Larger font size */
+            opacity: 0.9; /* Higher opacity */
+            text-shadow: 0 0 5px rgba(0,0,0,0.2); /* Subtle shadow */
+        }
+        .slick-prev, .slick-next {
+            z-index: 10;
+            width: 50px; /* Larger clickable area */
+            height: 50px;
+            background-color: rgba(255,255,255,0.5); /* Semi-transparent background */
+            border-radius: 50%; /* Circular shape */
+        }
+        .slick-prev {
+            left: -25px; /* Move further out */
+        }
+        .slick-next {
+            right: -25px; /* Move further out */
+        }
+        .video-thumb {
+            margin: 0 5px; /* Let Slick handle horizontal spacing primarily */
+            max-width: 1000px; /* Set maximum width for videos */
+        }
+        .video-thumb video {
+            width: 100%; /* Video fills its container */
+            height: auto;
+            display: block;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 8px; /* Apply radius to video if thumb has no background */
+        }
+        .task-block {
+            margin-bottom: 4rem;
+        }
+        .task-carousel {
+            margin-top: 2.5rem;
+            position: relative;
+            padding: 0 20px;
+            margin-bottom: 3rem;
+        }
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .slick-track {
+            display: flex;
+            align-items: center;
+        }
+        .slick-slide {
+            height: inherit;
+            margin: 0 5px;
+        }
+        .section-divider {
+            margin: 3rem auto;
+        }
+        /* Chart container spacing */
+        .chart-container {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        .nav-pills.nav-justified > li {
+            margin-left: 10px;
+            margin-right: 10px;
+            /* Reduce default spacing */
+        }
+        @media (max-width: 768px) {
+            .nav-pills.nav-justified > li {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="main">
+        <div class="row">
+            <h2 class="col-md-12 text-center">
+                <strong><font size="+8">Cross-Embodiment Transfer<br>via Behavior-Aligned Representations</font></strong> </br>
+            </h2>
+        </div>
+        <div class="row" style="margin-top: -10px;">
+            <div class="col-md-12 text-center authors">
+                <p>
+                    Ajay Sridhar<sup>*1</sup>, Jensen Gao<sup>*1</sup>, Jonathan Yang<sup>1</sup>, Jean Mercat<sup>2</sup>,
+                    Suneel Belkhale<sup>1</sup>, Dorsa Sadigh<sup>1</sup>
+                </p>
+                <p style="font-size: 0.9em; margin-top: -2px;">
+                    <sup>1</sup>Stanford University &nbsp;&nbsp; <sup>2</sup>Toyota Research Institute (TRI)
+                </p>
+                <p style="font-size: 0.85em; margin-top: -2px;">
+                    <sup>*</sup>Equal contribution. Correspondence: {ajaysri, jenseng}@stanford.edu
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <ul class="nav nav-pills nav-justified" style="max-width: 300px; margin: 0 auto;">
+                    <li>
+                        <a href="img/pdfs/anon_icra.pdf" target="_blank">
+                        <image src="img/paper.png" height="60px">
+                            <h4><strong>Paper</strong></h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" style="pointer-events: none; cursor: default; text-decoration: none;" onclick="return false;">
+                            <img src="img/dataset.201x256.png" height="60px">
+                            <h4 style="color: #000;"><strong>Dataset (coming soon)</strong></h4>
+                        </a>
+                    </li>
+                    <!-- <li>
+                        <a href="https://console.cloud.google.com/storage/browser/gdm-robovqa" target="_blank">
+                        <image src="img/storage_icon.png" height="60px">
+                            <h4><strong>Data</strong></h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/google-deepmind/robovqa/tree/main" target="_blank">
+                        <image src="img/github_icon.png" height="60px">
+                            <h4><strong>Code</strong></h4>
+                        </a>
+                    </li> -->
+                    <!-- <li> -->
+                        <!-- <a href="#videos"> -->
+                        <!-- <image src="img/youtube_icon.png" height="60px"> -->
+                            <!-- <h4><strong>Videos</strong></h4> -->
+                        <!-- </a> -->
+                    <!-- </li> -->
+                </ul>
+            </div>
+        </div>
+
+        <div style="width: 90%; margin: 30px auto 0;">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                
+                <a href="https://barx.github.io/img/BARX/barx_figures_v4.jpg" target="_blank" style="display: flex; justify-content: center; width: 100%; margin-top: -0px; text-decoration: none;"> <!-- margin-top: -80px; -->
+                    <video id="methodVideo" autoplay muted playsinline style="width: 120%; height: auto;"> <!-- Adjust this width percentage to resize the video -->
+                        <source src="img/videos/barx_figures_v6_first_vid_comp19.mp4" type="video/mp4">
+                        <img src="img/BARX/barx_figures_v4.jpg" alt="BARX method visualization" style="width: 100%; height: auto;">
+                    </video>
+                </a>
+                <div style="margin-top: 20px; text-align: left; width: 100%;">
+                    <p style="font-size: 1.0em; line-height: 1.4; color: #555; font-style: italic;">
+                        <b>Left</b>: We consider cross-embodiment datasets of both simulated and real-world robots. We then
+                        extract behavior-aligned representations: <b style="color: #4da72e">language motions</b> via heuristics using end effector pose deltas, <b style="color: #c6a623">end-effector traces</b> via segmentation models, and <b style="color: #c020d8">bounding boxes</b> via Grounding DINO. 
+                        <b>Right</b>: We train VLAs to predict actions with or without first predicting representations. This enhances transfer from cross-embodiment
+                        datasets, without needing representations during inference.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const video = document.getElementById('methodVideo');
+                
+                // Remove the loop attribute so we can control replaying
+                video.removeAttribute('loop');
+                
+                // Listen for the video ending
+                video.addEventListener('ended', function() {
+                    // Wait 4 seconds before replaying
+                    setTimeout(function() {
+                        video.play();
+                    }, 3000);
+                });
+            });
+        </script>
+        <br>
+
+        <div class="row" style="width: 80%; margin: 0 auto;">
+            <div class="col-md-12">
+                <h2>Abstract</h2>
+                <p>
+                    Recent progress in large-scale imitation learning for robot manipulation has been driven by leveraging datasets across a wide range of robot embodiments. However, achieving significant cross-embodiment transfer is often still challenging. In this work, we study the role of using behavior-aligned representations(e.g., <b style="color: #c020d8">object bounding boxes</b>, <b style="color: #4da72e">language motions</b>, <b style="color: #c6a623">2D end effector traces</b>) in vision-language-action (VLA) models to promote cross-embodiment transfer. We hypothesize that by carrying invariance across different embodiments while being predictive of robot actions, these representations can help unify diverse cross-embodiment data to enhance transfer in a scalable manner. We assess our hypothesis by developing a simulation-based benchmark designed to assess transfer with diverse, cross-embodiment data to new embodiments. Using this benchmark, we compare different representations and ways of incorporating them. Through our experiments, we identify that end-effector traces can be particularly beneficial for transfer, representations are generally more useful with larger cross-embodiment datasets, and can be used to benefit from action-free data. We also demonstrate that they can enhance sim-to-real cross-embodiment transfer, <b>improving task completion progress of real robot policies pre-trained on simulation data by 28%</b>.
+
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <hr class="section-divider">
+
+        <!-- Method Section -->
+        <section id="videos" class="section">
+            <div class="container is-max-desktop content-container">
+                <h2 class="title is-3 has-text-centered">Visualizations of Behavior-Aligned Representations</h2>
+
+                <p class="has-text-justified">
+                    These visualizations demonstrate predicted behavior-aligned representations for real and simulated robots: <b style="color: #4da72e">language motions</b>, <b style="color: #c6a623">2D end-effector traces</b>, and <b style="color: #c020d8">target object bounding boxes</b>.
+                </p>
+                
+                
+                <!-- Simulation Rollouts -->
+                <div class="task-block" id="task-1">
+                    <h3 class="title is-4 task-title">Simulation Rollouts</h3>
+                    <div class="task-carousel">
+                        <!-- Video Thumbnails - Replace sources with your own videos -->
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/pnpsinktocounter/panda_carrot_aux_viz_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda - Carrot - PnP Sink to Counter (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/pnpsinktocounter/jaco_lemon_pnpsinktocounter_viz_aux.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco - Lemon - PnP Sink to Counter (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/pnpcountertosink/panda_banana_aux_viz_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda - Banana - PnP Counter to Sink (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/pnpsinktocounter/jaco_cucumber_pnpsinktocounter_viz_aux.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco - Cucumber - PnP Sink to Counter (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/pnpsinktocounter/panda_orange_aux_viz_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda - Orange - PnP Sink to Counter (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/pnpcountertosink/jaco_carrot_pnpcountertosink.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco - Carrot - PnP Counter to Sink (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/pnpcountertosink/panda_can_aux_viz_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda - Can - PnP Counter to Sink (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/pnpcountertosink/jaco_lemon_pnpcountertosink_viz_aux.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco - Lemon - PnP Counter to Sink (1x speed)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real-World Rollouts -->
+                <div class="task-block" id="task-1">
+                    <h3 class="title is-4 task-title">Real-World Rollouts</h3>
+                    
+                    <div class="task-carousel">
+                        <!-- Video Thumbnails - Replace sources with your own videos -->
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_real_rollouts/viper/pnpcountertosink/xembod_aux/xembod_aux_viper_drumsticks_pnpcountertosink_viz_aux_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Viper - Drumsticks - PnP Counter to Sink (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_real_rollouts/franka/pnpcountertosink/xembod_aux/final_carrot_xembod_aux_success_viz_aux_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">FR3 - Carrot - PnP Counter to Sink (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_real_rollouts/viper/pnpcountertosink/xembod_aux/xembod_aux_viper_beans_pnpcountertosink_viz_aux_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Viper - Beans - PnP Counter to Sink (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_real_rollouts/franka/pnpcountertosink/xembod_aux/final_grapes_xembod_aux_panda_success_viz_aux_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">FR3 - Grapes - PnP Counter to Sink (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_real_rollouts/viper/pnpsinktocounter/xembod_aux/viper_xembod_aux_pnpsinktocounter_viz_aux_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Viper - PnP Sink to Counter (1x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_real_rollouts/franka/pnpsinktocounter/xembod_aux/xembod_aux_panda_pnpsinktocounter_viz_aux_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">FR3 - PnP Sink to Counter (1x speed)</div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+         <!-- Video Carousel Section -->
+        <section id="videos" class="section">
+            <div class="container is-max-desktop content-container">
+                <h2 class="title is-3 has-text-centered">Adaptation to New Embodiments</h2>
+                <div style="display: flex; justify-content: center; margin-top: 40px; margin-bottom: 40px;" class="chart-container">
+                    <img src="img/robocasa_examples.jpg" alt="RoboCasa Embodiments" style="max-width: 100%; height: auto;">
+                </div>
+
+                <p class="has-text-justified">
+                    We train models on X-Prior-300 and X-Prior-1000, a medium- and large-scale cross-embodiment simulation dataset with three robots in <a href="https://robocasa.ai" target="_blank">RoboCasa</a>: the Kinova, UR5e, and IIWA.
+                    Then we adapt the models to new robots, with small amounts of embodiment-specific data.
+                    In these experiments, we find that training with both cross-embodiment priors and behavior-aligned representations yields the best results.
+                    We train and test all models on the <i>PnP Counter to Sink</i>, <i>PnP Sink to Counter</i>, <i>Turn On Sink Faucet</i>, and <i>Flip Mug Upright</i> tasks.
+                </p>
+                
+
+                <!-- Task 2 -->
+                <div class="task-block" id="task-2">
+                    
+                    
+                    <!-- Simulation Results -->
+                    <h3 class="title is-4 task-title">Simulation Adaptation Results</h3>
+                    <div style="display: flex; justify-content: center; margin-top: 40px; margin-bottom: 40px;" class="chart-container">
+                        <img src="img/adaption_4_tasks.jpg" alt="Simulation Results" style="max-width: 105%; height: auto;">
+                    </div>
+                    <p class="has-text-justified">
+                        For our simulation experiments, we adapt our models to the Jaco, the Panda with the Robotiq Gripper, and the Panda with the original Panda Gripper.
+                        We found that represenations are generally more impactful when scaling up prior data (except for the <i>Turn On Sink Faucet</i> task).
+                        Specifically, for all tasks except the <i>Turn On Sink Faucet</i>, the overall improvement from training with representations is <b>+5.0%</b> when using no prior data, <b>+15.0%</b> when pretraining on X-Prior-300, and <b>+19.0%</b> when pretraining X-Prior-1000.
+                        We hypothesize this because the <i>Turn On Sink Faucet</i> task has less variation than our other tasks, which
+                        involve manipulating a variety of objects in different poses, while there is not as much variation in the poses and types of faucets.
+                        The baselines make progress on the tasks, such as moving the gripper to the target object, but often fail to complete more precise motions like grasping the object in the correct orientation.
+                        
+                     </p>
+                     <h3 class="title is-4 task-title">Comparison Rollouts for PnP Tasks</h3>
+
+                    <div class="task-carousel">
+                        <!-- Video Thumbnails - Replace sources with your own videos -->
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/pnpcountertosink/pickle_pnpcountertosink_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco - Cucumber - PnP Counter to Sink (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/pnpcountertosink/apple_pnpcountertosink_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda - Apple - PnP Counter to Sink (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/pnpsinktocounter/banana_pnpsinktocounter_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco - Banana - PnP Sink to Counter (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/pnpsinktocounter/carrot_pnpsinktocounter_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda - Carrot - PnP Sink to Counter (4x speed)</div>
+                        </div>
+                        <!--second iteration-->
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/pnpcountertosink/lemon_pnpcountertosink_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco - Lemon - PnP Counter to Sink (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/pnpcountertosink/banana_pnpcountertosink_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda - Banana - PnP Counter to Sink (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/pnpsinktocounter/lemon_pnpsinktocounter_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco - Lemon - PnP Sink to Counter (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/pnpsinktocounter/orange_pnpsinktocounter_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda - Orange - PnP Sink to Counter (4x speed)</div>
+                        </div>
+                    </div>
+
+                    <h3 class="title is-4 task-title">Comparison Rollouts for <i>Flip Mug Upright</i></h3>
+
+                    <div class="task-carousel">
+                        <!-- Video Thumbnails - Replace sources with your own videos -->
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/flip_mug/ep9_flip_mug_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/flip_mug/ep2_flip_mug_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/flip_mug/ep10_flip_mug_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/flip_mug/ep29_flip_mug_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco (4x speed)</div>
+                        </div>
+                        <!--second iteration-->
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/flip_mug/ep12_flip_mug_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/flip_mug/ep87_flip_mug_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco (4x speed)</div>
+                        </div>
+                    </div>
+
+                    <h3 class="title is-4 task-title">Comparison Rollouts for <i>Turn On Sink Faucet</i></h3>
+
+                    <div class="task-carousel">
+                        <!-- Video Thumbnails - Replace sources with your own videos -->
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/turn_on_sink/ep2_turn_on_sink_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/turn_on_sink/ep2_turn_on_sink_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/turn_on_sink/ep20_turn_on_sink_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/turn_on_sink/ep21_turn_on_sink_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco (4x speed)</div>
+                        </div>
+                        <!--second iteration-->
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/panda/turn_on_sink/ep63_turn_on_sink_panda_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Panda (4x speed)</div>
+                        </div>
+                        <div class="video-thumb">
+                            <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                <source src="img/videos/barx_sim_rollouts/jaco/turn_on_sink/ep75_turn_on_sink_jaco_4x_comparison_compressed.mp4" type="video/mp4">
+                            </video>
+                            <div class="video-caption">Jaco (4x speed)</div>
+                        </div>
+                    </div>
+
+                    <!-- Real-World Results -->
+                    <h3 class="title is-4 task-title">Real-World Adaptation Results</h3>
+                    <div style="display: flex; justify-content: center; margin-top: 40px; margin-bottom: 40px;" class="chart-container">
+                        <img src="img/real_results.png" alt="Real Results" style="max-width: 100%; height: auto;">
+                    </div>
+                    <p class="has-text-justified">
+                        For our real-world experiments, we adapt our models to the ViperX 300 S and the Franka Research 3.
+                        This is especially challenging because we have to deal with the sim-to-real gap in addition to the cross-embodiment gap.
+                        We found that training with the representations was particularly beneficial for the <i>PnP Sink to Counter</i> task. 
+                        The target was difficult to spot in certain locations, so using representations such as <b style="color: #c020d8">bounding boxes</b> helped the model locate the object.
+                        Training with representations improves the task progress over the cross-embodiment baseline on average by <b>28.3%</b>.
+                    </p>
+                    <div class="task-block" id="task-2">
+                        <div class="task-carousel">
+                            <div class="video-thumb">
+                                <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                    <source src="img/videos/barx_real_rollouts/viper/pnpsinktocounter/ViperX_bell_pepper_comparison_2x_new_name_compressed.mp4" type="video/mp4">
+                                </video>
+                                <div class="video-caption">Viper - Bell Pepper - PnP Sink to Counter (2x speed)</div>
+                            </div>
+                            <div class="video-thumb">
+                                <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                    <source src="img/videos/barx_real_rollouts/franka/pnpcountertosink/FR3_grapes_comparison_2x_new_name_compressed.mp4" type="video/mp4">
+                                </video>
+                                <div class="video-caption">FR3 - Grapes - PnP Counter to Sink (2x speed)</div>
+                            </div>
+                            <div class="video-thumb">
+                                <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                    <source src="img/videos/barx_real_rollouts/viper/pnpcountertosink/ViperX_beans_comparison_2x_new_name_compressed.mp4" type="video/mp4">
+                                </video>
+                                <div class="video-caption">Viper - Beans - PnP Counter to Sink (2x speed)</div>
+                            </div>
+                            <div class="video-thumb">
+                                <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                    <source src="img/videos/barx_real_rollouts/franka/pnpcountertosink/FR3_carrot_comparison_2x_new_name_compressed.mp4" type="video/mp4">
+                                </video>
+                                <div class="video-caption">FR3 - Carrot - PnP Counter to Sink (2x speed)</div>
+                            </div>
+                            <div class="video-thumb">
+                                <video class="thumb-video" autoplay loop muted playsinline preload="metadata">
+                                    <source src="img/videos/barx_real_rollouts/viper/pnpcountertosink/ViperX_drumsticks_comparison_2x_new_name_compressed.mp4" type="video/mp4">
+                                </video>
+                                <div class="video-caption">Viper - Drumsticks - PnP Counter to Sink (2x speed)</div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+                
+                
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <section id="videos" class="section">
+            <div class="container is-max-desktop content-container">
+                <h2 class="title is-3 has-text-centered">Representation Inference</h2>
+
+                <div style="display: flex; justify-content: center; margin-top: 40px; margin-bottom: 40px;" class="chart-container">
+                    <img src="img/eval_all_1000_2by2_repr_inference.jpg" alt="Representation Inference" style="max-width: 100%; height: auto;">
+                </div>
+
+                <p class="has-text-justified">
+                    We compare inference of Joint Reps models by either only predicting actions, or first predicting a representation and then actions.
+                    Predicting representations can help in some situations, but the impact is usually not substantial.
+                </p>
+                
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+
+        <section id="videos" class="section">
+            <div class="container is-max-desktop content-container">
+                <h2 class="title is-3 has-text-centered">Action-Free Transfer</h2>
+
+                <div style="display: flex; justify-content: center; margin-top: 40px; margin-bottom: 40px;" class="chart-container">
+                    <img src="img/action_free.jpg" alt="Action-Free Transfer" style="max-width: 100%; height: auto;">
+                </div>
+
+                <p class="has-text-justified">
+                    We find that behavior-aligned representations can leverage
+                    action-free prior datasets to improve over learning with no prior
+                    dataset, as well as using the full prior dataset with actions but
+                    without representations. However, performance is slightly worse
+                    than using representations with the prior dataset with actions.
+                </p>
+                
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        
+
+
+        
+        <!-- <div class="row"> -->
+            <!-- <div class="col-md-12"> -->
+                <!-- <h3> -->
+                    <!-- Acknowledgements -->
+                <!-- </h3> -->
+                <!-- <p class="text-justify"> -->
+                <!-- The website template was borrowed from <a href="http://jonbarron.info/">Jon Barron</a>. -->
+                <!-- </p> -->
+            <!-- </div> -->
+        <!-- </div> -->
+
+
+
+        <br>
+    <center class="is-size-10">
+        The website design was adapted from <a href="https://nerfies.github.io/" class="external-link"><span class="dnerf">Nerfies</span></a>.
+    </center>
+    <br>
+    </div>
+    
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Slick Carousel JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('.task-carousel').slick({
+                slidesToShow: 2,
+                slidesToScroll: 1,
+                infinite: false,
+                arrows: true,
+                dots: false,
+                // variableWidth: true, // Can cause issues if not configured perfectly with CSS
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>
